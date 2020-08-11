@@ -22,6 +22,41 @@ const routes: Array<RouteConfig> = [
     path: '/movies',
     name: 'Movies',
     component: () => import('../views/Movies.vue')
+  },
+  {
+    path: '/series',
+    name: 'Series',
+    component: () => import('../views/Series.vue')
+  },
+  {
+    path: '/games',
+    name: 'Games',
+    component: () => import('../views/Games.vue')
+  },
+  {
+    path: '/books',
+    name: 'Books',
+    component: () => import('../views/Books.vue')
+  },
+  {
+    path: '/music',
+    name: 'Music',
+    component: () => import('../views/Music.vue')
+  },
+  {
+    path: '/recipes',
+    name: 'Recipes',
+    component: () => import('../views/Recipes.vue')
+  },
+  {
+    path: '/restaurants',
+    name: 'Restaurants',
+    component: () => import('../views/Restaurants.vue')
+  },
+  {
+    path: '/daysOut',
+    name: 'DaysOut',
+    component: () => import('../views/DaysOut.vue')
   }
 ]
 
