@@ -1,13 +1,13 @@
 <template>
-  <div class="movies">
-    <Recommendations type='movies'/>
+  <div class="music">
+    <Recommendations type='music'/>
   </div>
 </template>
 
 <script>
 import Recommendations from '@/components/Recommendations.vue'
 export default {
-  name: 'movies',
+  name: 'music',
   components: {
     Recommendations
   }
