@@ -1,19 +1,26 @@
 
 <template>
-    <div>
+    <div id="example">
         <h1>{{ type }}</h1>
-        {{ info }}
+        <p>{{ info }}</p>
     </div>
 </template>
 <script lang="ts">
 import axios from 'axios'
 import { Component, Prop, Vue } from 'vue-property-decorator'
-@Component
-export default class Recommendations extends Vue {
-  @Prop() private type!: string;
-}
-data: {
-    info: 'hello'
+
+export default {
+  data () {
+    return {
+      info: ''
+    }
+  },
+  created () {
+    axios.get('https://api.coindesk.com/v1/bpi/currentprice.json')
+      .then(response => { this.info = response.data })
+  },
+  props: {
+    type: String
   }
-axios.get('https://api.coindesk.com/v1/bpi/currentprice.json').then(response => (Vue.info = response))
+}
 </script>

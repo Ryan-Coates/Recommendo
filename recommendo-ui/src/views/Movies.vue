@@ -6,7 +6,7 @@
 
 <script>
 import Recommendations from '@/components/Recommendations.vue'
-export default {  
+export default {
   name: 'movies',
   components: {
     Recommendations
