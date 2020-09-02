@@ -12,7 +12,7 @@
       <recomendation-form @addRecommendation='appendRecommendation'></recomendation-form>
     </div>
 </template>
-<script lang="ts">
+<script>
 import RecomendationItem from './RecommendationItem.vue'
 import RecomendationForm from './RecommendationForm.vue'
 
@@ -21,12 +21,6 @@ export default {
   components: {
     RecomendationItem,
     RecomendationForm
-  },
-  methods: {
-    appendRecommendation (name: string, description: string) {
-      this.recommendations.push({ name: name, description: description })
-    }
-
   },
   data () {
     return {
@@ -40,6 +34,12 @@ export default {
   },
   props: {
     type: String
+  },
+  methods: {
+    appendRecommendation (name, description) {
+      this.recommendations.push({ name: name, description: description })
+    }
+
   }
 }
 </script>
