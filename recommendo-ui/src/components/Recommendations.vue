@@ -9,7 +9,7 @@
       >{{recommendation.name}}:{{recommendation.description}}
       </recomendation-item>
       <br><hr>
-      <recomendation-form @addRecommendation='appendRecommendation'></recomendation-form>
+      <recomendation-form @addRecommendation='appendRecommendation' :type=type></recomendation-form>
     </div>
 </template>
 <script>
