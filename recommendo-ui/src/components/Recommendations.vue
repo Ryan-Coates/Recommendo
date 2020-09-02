@@ -1,24 +1,43 @@
 
 <template>
-    <div id="example">
+    <div id="recommendations">
         <h1>{{ type }}</h1>
-        <p>{{ info }}</p>
+        <recomendation-item
+        v-for='recommendation in recommendations'
+        :key='recommendation.id'
+        :recommendation='recommendation'
+      >{{recommendation.name}}:{{recommendation.description}}
+      </recomendation-item>
+      <br><hr>
+      <recomendation-form @addRecommendation='appendRecommendation'></recomendation-form>
     </div>
 </template>
 <script lang="ts">
-import axios from 'axios'
-import { Component, Prop, Vue } from 'vue-property-decorator'
+import RecomendationItem from './RecommendationItem.vue'
+import RecomendationForm from './RecommendationForm.vue'
 
 export default {
+  name: 'Recommendations',
+  components: {
+    RecomendationItem,
+    RecomendationForm
+  },
+  methods: {
+    appendRecommendation (name: string, description: string) {
+      this.recommendations.push({ name: name, description: description })
+    }
+
+  },
   data () {
     return {
-      info: ''
+      title: 'All Recomendations',
+      recommendations: [
+        { name: 'Self-Reliance', description: 'Ralph Waldo Emerson' },
+        { name: 'American Gods', description: 'Neil Gaiman' },
+        { name: 'Amusing Ourselves to Death', description: 'Neil Postman' }
+      ]
     }
   },
-  /* created () {
-    axios.get('https://api.coindesk.com/v1/bpi/currentprice.json')
-      .then(response => { info = response.data })
-  }, */
   props: {
     type: String
   }
