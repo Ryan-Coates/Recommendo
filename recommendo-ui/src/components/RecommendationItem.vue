@@ -1,6 +1,6 @@
 <template>
     <li>
-        {{recommendation.name}}: {{recommendation.description}}
+      Name: {{recommendation.name}} | Description: {{recommendation.description}}
     </li>
 </template>
 <script>

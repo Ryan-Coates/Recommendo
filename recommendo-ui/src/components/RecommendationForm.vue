@@ -1,9 +1,13 @@
 <template>
 <div>
+  <h3>Feed me recommendations!!!!</h3>
     <form v-on:submit.prevent="recommendationSubmit(name, description)" class="" action="#" method="post" name="add-recommendation" data-netlify="true" data-netlify-honeypot="bot-field" >
     <input v-model="name" type="text" name="name" value="" placeholder="name">
-    <input v-model="description" type="text" name="description" value="" placeholder="description">
+    <input v-model="description" type="textarea" name="description" value="" placeholder="description">
+    <br>
+    <input v-model="recommender" type="text" name="recommender" value="" placeholder="what's your name?">
     <input v-model="category" type="text" name="category" value="" placeholder="category">
+    <br>
     <button type="submit" name="button">Add {{type}}</button>
 </form>
 </div>
@@ -18,12 +22,13 @@ export default {
     return {
       name: '',
       description: '',
-      category: this.type
+      category: this.type,
+      recommender: ''
     }
   },
   methods: {
-    recommendationSubmit (name, description) {
-      this.$emit('addRecommendation', name, description)
+    recommendationSubmit (name, description, recommender) {
+      this.$emit('addRecommendation', name, description, recommender)
       fetch('/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -32,6 +37,7 @@ export default {
           name: this.name,
           description: this.description,
           category: this.category,
+          recommender: this.recommender,
           ...this.form
         })
       })

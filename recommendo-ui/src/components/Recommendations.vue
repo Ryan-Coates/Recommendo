@@ -1,12 +1,12 @@
 
 <template>
     <div id="recommendations">
-        <h1>{{ type }}</h1>
+        <h1>{{type}}</h1>
         <recomendation-item
         v-for='recommendation in recommendations'
         :key='recommendation.id'
         :recommendation='recommendation'
-      >{{recommendation.name}}:{{recommendation.description}}
+      >
       </recomendation-item>
       <br><hr>
       <recomendation-form @addRecommendation='appendRecommendation' :type=type></recomendation-form>
@@ -22,22 +22,13 @@ export default {
     RecomendationItem,
     RecomendationForm
   },
-  data () {
-    return {
-      title: 'All Recomendations',
-      recommendations: [
-        { name: 'Self-Reliance', description: 'Ralph Waldo Emerson' },
-        { name: 'American Gods', description: 'Neil Gaiman' },
-        { name: 'Amusing Ourselves to Death', description: 'Neil Postman' }
-      ]
-    }
-  },
-  props: {
-    type: String
-  },
+  props: [
+    'recommendations',
+    'type'
+  ],
   methods: {
-    appendRecommendation (name, description) {
-      this.recommendations.push({ name: name, description: description })
+    appendRecommendation (name, description, recommender) {
+      this.recommendations.push({ name: name, description: description, recommender: recommender })
     }
 
   }

@@ -1,6 +1,6 @@
 <template>
   <div class="games">
-    <Recommendations type='games'/>
+    <Recommendations type='games' :recommendations=recommendations />
   </div>
 </template>
 
@@ -10,6 +10,13 @@ export default {
   name: 'games',
   components: {
     Recommendations
+  },
+  data () {
+    return {
+      recommendations: [
+        { name: 'Games Placeholder', description: 'Add recommendations so i can go away!', recommender: 'Ryan' }
+      ]
+    }
   }
 }
 </script>

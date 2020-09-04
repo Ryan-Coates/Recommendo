@@ -1,6 +1,6 @@
 <template>
   <div class="music">
-    <Recommendations type='music'/>
+    <Recommendations type='music' :recommendations=recommendations />
   </div>
 </template>
 
@@ -10,6 +10,13 @@ export default {
   name: 'music',
   components: {
     Recommendations
+  },
+  data () {
+    return {
+      recommendations: [
+        { name: 'Music Placeholder', description: 'Add recommendations so i can go away!', recommender: 'Ryan' }
+      ]
+    }
   }
 }
 </script>

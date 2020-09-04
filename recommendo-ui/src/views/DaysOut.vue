@@ -1,6 +1,6 @@
 <template>
   <div class="daysout">
-    <Recommendations type='days out'/>
+    <Recommendations type='days out' :recommendations=recommendations />
   </div>
 </template>
 
@@ -10,6 +10,13 @@ export default {
   name: 'daysout',
   components: {
     Recommendations
+  },
+  data () {
+    return {
+      recommendations: [
+        { name: 'Days Out Placeholder', description: 'Add recommendations so i can go away!', recommender: 'Ryan' }
+      ]
+    }
   }
 }
 </script>
