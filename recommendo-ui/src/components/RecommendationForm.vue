@@ -29,6 +29,9 @@ export default {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: this.encode({
           'form-name': 'add-recommendation',
+          name: this.name,
+          description: this.description,
+          category: this.category,
           ...this.form
         })
       })
