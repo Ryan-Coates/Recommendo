@@ -1,6 +1,6 @@
 <template>
 <div>
-    <form v-on:submit.prevent="recommendationSubmit(name, description)" class="" action="#" method="post" :name=type data-netlify="true" data-netlify-honeypot="bot-field" >
+    <form v-on:submit.prevent="recommendationSubmit(name, description)" class="" action="#" method="post" name="add-recommendation" data-netlify="true" data-netlify-honeypot="bot-field" >
     <input v-model="name" type="text" name="name" value="" placeholder="name">
     <input v-model="description" type="text" name="description" value="" placeholder="description">
     <input v-model="category" type="text" name="category" value="" placeholder="category">
@@ -28,7 +28,7 @@ export default {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: this.encode({
-          'form-name': this.type,
+          'form-name': 'add-recommendation',
           ...this.form
         })
       })
