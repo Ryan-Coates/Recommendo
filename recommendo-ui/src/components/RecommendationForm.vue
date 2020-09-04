@@ -5,30 +5,9 @@
     <input v-model="description" type="text" name="description" value="" placeholder="description">
     <button type="submit" name="button">Add {{type}}</button>
 </form>
-  <form
-    name="ask-question"
-    method="post"
-    data-netlify="true"
-    data-netlify-honeypot="bot-field"
-    >
-    <input type="hidden" name="form-name" value="ask-question" />
-    <label v-for="(panelist, index) in panelists" :key="index">
-      <input
-        type="radio"
-        name="panelist"
-        :value="panelist"
-        @input="ev => updatePanelist"
-        :checked="panelist === currentPanelist"
-      />
-      <span>{{ panelist }}</span>
-    </label>
-    ...
-    <button>Submit</button>
-  </form>
-  </div>
+</div>
 </template>
 <script>
-import axios from 'axios'
 export default {
   name: 'RecommendationForm',
   props: {
@@ -37,24 +16,26 @@ export default {
   data () {
     return {
       name: '',
-      description: '',
-      panelists: ['Evan You', 'Chris Fritz'],
-      currentPanelist: 'Evan You'
+      description: ''
     }
   },
   methods: {
     recommendationSubmit (name, description) {
       this.$emit('addRecommendation', name, description)
-      const axiosConfig = {
-        header: { 'Content-Type': 'application/x-www-form-urlencoded' }
-      }
-      axios.post(
-        '/',
-        this.encode({
-          'form-name': this.type,
+      fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: this.encode({
+          'form-name': 'ask-question',
           ...this.form
-        }),
-        axiosConfig)
+        })
+      })
+        .then(() => {
+          // this.$router.push('thanks')
+        })
+        .catch(() => {
+          this.$router.push('404')
+        })
     },
     encode (data) {
       return Object.keys(data)
