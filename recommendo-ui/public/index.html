@@ -8,6 +8,12 @@
     <title><%= htmlWebpackPlugin.options.title %></title>
   </head>
   <body>
+      <!-- A little help for the Netlify post-processing bots -->
+      <form name="add-recommendation" netlify netlify-honeypot="bot-field" hidden>
+        <input type="text" name="name" value="" placeholder="name">
+        <input type="text" name="description" value="" placeholder="description">
+        <input type="text" name="type" value="" placeholder="type">
+      </form>
     <noscript>
       <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>

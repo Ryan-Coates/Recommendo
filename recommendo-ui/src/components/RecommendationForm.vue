@@ -3,6 +3,7 @@
     <form v-on:submit.prevent="recommendationSubmit(name, description)" class="" action="#" method="post" :name=type data-netlify="true" data-netlify-honeypot="bot-field" >
     <input v-model="name" type="text" name="name" value="" placeholder="name">
     <input v-model="description" type="text" name="description" value="" placeholder="description">
+    <input v-model="type" type="text" name="type" :value=type :placeholder=type>
     <button type="submit" name="button">Add {{type}}</button>
 </form>
 </div>
