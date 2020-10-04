@@ -13,25 +13,25 @@ namespace Recommendo_api.Controllers
     [ApiController]
     public class RecipesController : ControllerBase
     {
-        private readonly RecipeContext _context;
+        private readonly RecommendoRecipesContext _context;
 
-        public RecipesController(RecipeContext context)
+        public RecipesController(RecommendoRecipesContext context)
         {
             _context = context;
         }
 
         // GET: api/Recipes
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Recipe>>> GetRecipes()
+        public async Task<ActionResult<IEnumerable<Recipe>>> GetRecipe()
         {
-            return await _context.Recipes.ToListAsync();
+            return await _context.Recipe.ToListAsync();
         }
 
         // GET: api/Recipes/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Recipe>> GetRecipe(long id)
+        public async Task<ActionResult<Recipe>> GetRecipe(int id)
         {
-            var recipe = await _context.Recipes.FindAsync(id);
+            var recipe = await _context.Recipe.FindAsync(id);
 
             if (recipe == null)
             {
@@ -45,9 +45,9 @@ namespace Recommendo_api.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutRecipe(long id, Recipe recipe)
+        public async Task<IActionResult> PutRecipe(int id, Recipe recipe)
         {
-            if (id != recipe.Id)
+            if (id != recipe.RecipeId)
             {
                 return BadRequest();
             }
@@ -79,32 +79,31 @@ namespace Recommendo_api.Controllers
         [HttpPost]
         public async Task<ActionResult<Recipe>> PostRecipe(Recipe recipe)
         {
-            _context.Recipes.Add(recipe);
+            _context.Recipe.Add(recipe);
             await _context.SaveChangesAsync();
 
-            //return CreatedAtAction("GetRecipe", new { id = recipe.Id }, recipe);
-            return CreatedAtAction(nameof(GetRecipe), new { id = recipe.Id }, recipe);
+            return CreatedAtAction("GetRecipe", new { id = recipe.RecipeId }, recipe);
         }
 
         // DELETE: api/Recipes/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Recipe>> DeleteRecipe(long id)
+        public async Task<ActionResult<Recipe>> DeleteRecipe(int id)
         {
-            var recipe = await _context.Recipes.FindAsync(id);
+            var recipe = await _context.Recipe.FindAsync(id);
             if (recipe == null)
             {
                 return NotFound();
             }
 
-            _context.Recipes.Remove(recipe);
+            _context.Recipe.Remove(recipe);
             await _context.SaveChangesAsync();
 
             return recipe;
         }
 
-        private bool RecipeExists(long id)
+        private bool RecipeExists(int id)
         {
-            return _context.Recipes.Any(e => e.Id == id);
+            return _context.Recipe.Any(e => e.RecipeId == id);
         }
     }
 }
