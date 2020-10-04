@@ -13,7 +13,7 @@ export default {
   },
   methods: {
     fetchData () {
-      fetch('https://recomendo-api.kenisuel.com/api/recipes')
+      fetch('https://recommendo-api.knisuel.com/api/recipes')
         .then(response => response.json())
         .then(data => console.log(data))
     }
