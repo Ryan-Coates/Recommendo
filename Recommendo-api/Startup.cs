@@ -22,7 +22,7 @@ namespace Recommendo_api
         public void ConfigureServices(IServiceCollection services)
         {
             var connection = Configuration.GetConnectionString("recommendo-recipeDatabase");
-            services.AddDbContextPool<recommendorecipesContext>(options => options.UseSqlServer(connection));
+            services.AddDbContextPool<RecommendoRecipesContext>(options => options.UseSqlServer(connection));
             services.AddControllers();
         }
 

@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Recommendo_api.Models
 {
-    public partial class recommendorecipesContext : DbContext
+    public partial class RecommendoRecipesContext : DbContext
     {
-        public recommendorecipesContext(DbContextOptions<recommendorecipesContext> options)
+        public RecommendoRecipesContext(DbContextOptions<RecommendoRecipesContext> options)
             : base(options)
         {
         }

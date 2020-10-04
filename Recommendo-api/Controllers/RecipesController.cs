@@ -13,9 +13,9 @@ namespace Recommendo_api.Controllers
     [ApiController]
     public class RecipesController : ControllerBase
     {
-        private readonly recommendorecipesContext _context;
+        private readonly RecommendoRecipesContext _context;
 
-        public RecipesController(recommendorecipesContext context)
+        public RecipesController(RecommendoRecipesContext context)
         {
             _context = context;
         }
