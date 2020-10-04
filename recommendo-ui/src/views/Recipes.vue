@@ -11,11 +11,16 @@ export default {
   components: {
     Recommendations
   },
+  methods: {
+    fetchData () {
+      fetch('https://recommendo-api.knisuel.com/api/recipes')
+        .then(response => response.json())
+        .then(data => console.log(data))
+    }
+  },
   data () {
     return {
-      recommendations: [
-        { name: 'Recipes Placeholder', description: 'Add recommendations so i can go away!', recommender: 'Ryan' }
-      ]
+      recommendations: this.fetchData()
     }
   }
 }
