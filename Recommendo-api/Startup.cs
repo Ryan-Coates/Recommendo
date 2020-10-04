@@ -24,6 +24,15 @@ namespace Recommendo_api
             var connection = Configuration.GetConnectionString("recommendo-recipeDatabase");
             services.AddDbContextPool<RecommendoRecipesContext>(options => options.UseSqlServer(connection));
             services.AddControllers();
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: "allowed",
+                    builder =>
+                    {
+                        builder.WithOrigins("http://localhost:8080", "https://recommendo.netlify.app"
+                            );
+                    });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,6 +53,8 @@ namespace Recommendo_api
             {
                 endpoints.MapControllers();
             });
+
+            app.UseCors();
         }
     }
 }
