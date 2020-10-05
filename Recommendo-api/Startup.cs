@@ -11,6 +11,7 @@ namespace Recommendo_api
 {
     public class Startup
     {
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -21,23 +22,29 @@ namespace Recommendo_api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: MyAllowSpecificOrigins,
+                    builder =>
+                    {
+                        builder
+                        .AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
+                    });
+            });
             var connection = Configuration.GetConnectionString("recommendo-recipeDatabase");
             services.AddDbContextPool<RecommendoRecipesContext>(options => options.UseSqlServer(connection));
             services.AddControllers();
-            services.AddCors(options =>
-            {
-                options.AddPolicy(name: "allowed",
-                    builder =>
-                    {
-                        builder.WithOrigins("http://localhost:8080", "https://recommendo.netlify.app"
-                            );
-                    });
-            });
+           
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
+            app.UseCors(MyAllowSpecificOrigins);
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -54,7 +61,6 @@ namespace Recommendo_api
                 endpoints.MapControllers();
             });
 
-            app.UseCors();
         }
     }
 }
