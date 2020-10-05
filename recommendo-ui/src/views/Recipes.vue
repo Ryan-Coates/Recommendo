@@ -11,17 +11,13 @@ export default {
   components: {
     Recommendations
   },
-  methods: {
-    fetchData () {
-      fetch('https://recommendo-api.knisuel.com/api/recipes')
-        .then(response => response.json())
-        .then(data => console.log(data))
-    }
-  },
   data () {
     return {
-      recommendations: this.fetchData()
+      recommendations: []
     }
+  },
+  mounted () {
+    fetch('https://recommendo-api.knisuel.com//api/recipes').then(response => response.json()).then(data => { this.recommendations = data })
   }
 }
 </script>
