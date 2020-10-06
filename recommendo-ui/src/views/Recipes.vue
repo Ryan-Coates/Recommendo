@@ -17,7 +17,7 @@ export default {
     }
   },
   mounted () {
-    fetch('https://recommendo-api.knisuel.com//api/recipes').then(response => response.json()).then(data => { this.recommendations = data })
+    fetch('https://recommendo-api.knisuel.com/api/recipes').then(response => response.json()).then(data => { this.recommendations = data })
   }
 }
 </script>
