@@ -11,9 +11,6 @@ namespace Recommendo_api.Models
         public string Ingredients { get; set; }
         public string Method { get; set; }
 
-        //public enum for type
-        // public RecommendationType Type { get; set; }
-
         public enum RecommdationType
         {
             Recipe = 0,
