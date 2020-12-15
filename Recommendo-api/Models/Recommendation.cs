@@ -3,16 +3,12 @@ using System.Collections.Generic;
 
 namespace Recommendo_api.Models
 {
-    public partial class Recipe
+    //todo: some model validation
+    public partial class Recommendation
     {
-        public int RecipeId { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public string Ingredients { get; set; }
-        public string Method { get; set; }
-
-        //public enum for type
-        // public RecommendationType Type { get; set; }
 
         public enum RecommdationType
         {

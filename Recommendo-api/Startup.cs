@@ -33,8 +33,8 @@ namespace Recommendo_api
                         .AllowAnyHeader();
                     });
             });
-            var connection = Configuration.GetConnectionString("recommendo-recipeDatabase");
-            services.AddDbContextPool<RecommendoRecipesContext>(options => options.UseSqlServer(connection));
+            var connection = Configuration.GetConnectionString("recommendo");
+            services.AddDbContextPool<RecommendationContext>(options => options.UseSqlServer(connection));
             services.AddControllers();
            
         }
