@@ -29,7 +29,7 @@ namespace Recommendo_api.Controllers
 
         // GET: api/Recommendations/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Recommendation>> GetRecipe(int id)
+        public async Task<ActionResult<Recommendation>> GetAsync(int id)
         {
             var recipe = await _context.Recommendations.FindAsync(id);
 
@@ -41,11 +41,11 @@ namespace Recommendo_api.Controllers
             return recipe;
         }
        
-        // POST: api/Recipes
+        // POST: api/Recommendations
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Recommendation>> PostRecipe(Recommendation recommendation)
+        public async Task<ActionResult<Recommendation>> PostAsync(Recommendation recommendation)
         {
             _context.Recommendations.Add(recommendation);
             await _context.SaveChangesAsync();
@@ -55,7 +55,7 @@ namespace Recommendo_api.Controllers
 
         // DELETE: api/Recommendations/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Recommendation>> DeleteRecipe(int id)
+        public async Task<ActionResult<Recommendation>> DeleteAsync(int id)
         {
             var recipe = await _context.Recommendations.FindAsync(id);
             if (recipe == null)
