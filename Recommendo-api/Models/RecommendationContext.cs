@@ -20,22 +20,9 @@ namespace Recommendo_api.Models
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Recommendation>(entity =>
-            {
-                entity.Property(e => e.Description)
-                    .HasMaxLength(1000)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-            });
-
-            OnModelCreatingPartial(modelBuilder);
+        {            
+            modelBuilder.Entity<Recommendation>().ToTable("Recommendations");
+            base.OnModelCreating(modelBuilder);
         }
-
-        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }
