@@ -7,7 +7,7 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0-buster-slim AS build
 WORKDIR /src
-COPY ["/", "Recommendo-api/"]
+COPY ["/Recommendo-api", "Recommendo-api/"]
 RUN dotnet restore "Recommendo-api/Recommendo-api.csproj"
 COPY . .
 WORKDIR "/src/Recommendo-api"
