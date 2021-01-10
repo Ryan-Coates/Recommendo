@@ -48,7 +48,7 @@ namespace Recommendo_api
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
                 var context = serviceScope.ServiceProvider.GetRequiredService<RecommendationContext>();
-                context.Database.EnsureDeleted();
+                context.Database.EnsureDeleted(); //todo: nukes the db, to be removed
                 context.Database.EnsureCreated();
             }
 
