@@ -36,7 +36,7 @@ namespace Recommendo_api.Controllers
             _context.Recommendations.Add(recommendation);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetRecipe", new { id = recommendation.Id }, recommendation);
+            return Ok();
         }
 
         // DELETE: api/Recommendations/5
