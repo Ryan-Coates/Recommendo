@@ -1,7 +1,7 @@
 <template>
 <div>
   <h3>Feed me recommendations!!!!</h3>
-    <form v-on:submit.prevent="recommendationSubmit(name, description)" class="" action="#" method="post" name="add-recommendation" data-netlify="true" data-netlify-honeypot="bot-field" >
+    <form v-on:submit.prevent="recommendationSubmit(name, description, recommender)" class="" action="#" method="post" name="add-recommendation" data-netlify="true" data-netlify-honeypot="bot-field" >
     <input v-model="name" type="text" name="name" value="" placeholder="name">
     <input v-model="description" type="textarea" name="description" value="" placeholder="description">
     <br>
@@ -29,17 +29,16 @@ export default {
   methods: {
     recommendationSubmit (name, description, recommender) {
       this.$emit('addRecommendation', name, description, recommender)
-      fetch('/', {
+      const data = {
+        name: name,
+        description: description,
+        type: this.type,
+        recommender: recommender
+      }
+      fetch(this.$apiEndpoint, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: this.encode({
-          'form-name': 'add-recommendation',
-          name: this.name,
-          description: this.description,
-          category: this.category,
-          recommender: this.recommender,
-          ...this.form
-        })
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
       })
         .then(() => {
           // this.$router.push('thanks')
@@ -47,18 +46,7 @@ export default {
         .catch(() => {
           this.$router.push('404')
         })
-    },
-    encode (data) {
-      return Object.keys(data)
-        .map(
-          key => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`
-        )
-        .join('&')
     }
-
   }
 }
 </script>
-<style>
-
-</style>

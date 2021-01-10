@@ -6,6 +6,13 @@ import router from './router'
 import store from './store'
 
 Vue.config.productionTip = false
+
+// debug
+// Vue.prototype.$apiEndpoint = 'https://localhost:5001/api/Recommendations'
+
+// live
+Vue.prototype.$apiEndpoint = 'https://recommendo-api.knisuel.com/api/Recommendations'
+
 Vue.use(VueAxios)
 
 new Vue({

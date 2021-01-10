@@ -13,10 +13,12 @@ export default {
   },
   data () {
     return {
-      recommendations: [
-        { name: 'Books Placeholder', description: 'Add recommendations so i can go away!', recommender: 'Ryan' }
-      ]
+      name: 'books',
+      recommendations: []
     }
+  },
+  mounted () {
+    fetch(this.$apiEndpoint + '/?type=' + this.name).then(response => response.json()).then(data => { this.recommendations = data })
   }
 }
 </script>
