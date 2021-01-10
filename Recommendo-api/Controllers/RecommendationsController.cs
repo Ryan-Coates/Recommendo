@@ -20,27 +20,13 @@ namespace Recommendo_api.Controllers
             _context = context;
         }
 
-        // GET: api/Recommendations
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Recommendation>>> GetAsync()
+        public async Task<ActionResult<IEnumerable<Recommendation>>> GetAsync(string type)
         {
-           return await _context.Recommendations.ToListAsync();
+            //todo: move logic to service layer and include hide filter
+            return await _context.Recommendations.Where(x => x.Type == type).ToListAsync();
         }
 
-        // GET: api/Recommendations/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Recommendation>> GetAsync(int id)
-        {
-            var recipe = await _context.Recommendations.FindAsync(id);
-
-            if (recipe == null)
-            {
-                return NotFound();
-            }
-
-            return recipe;
-        }
-       
         // POST: api/Recommendations
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
