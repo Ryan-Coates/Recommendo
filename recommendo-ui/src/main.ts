@@ -11,7 +11,7 @@ Vue.config.productionTip = false
 // Vue.prototype.$apiEndpoint = 'https://localhost:5001/api/Recommendations'
 
 // live
-Vue.prototype.$apiEndpoint = 'https://recommendo-api.knisuel.com/api/Recommendations'
+Vue.prototype.$apiEndpoint = 'http://recommendo.duckdns.org:8080/api/Recommendations'
 
 Vue.use(VueAxios)
 
