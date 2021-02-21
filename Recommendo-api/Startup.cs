@@ -35,7 +35,7 @@ namespace Recommendo_api
                     });
             });
             var connection = Configuration.GetConnectionString("recommendo");
-            services.AddDbContextPool<RecommendationContext>(options => options.UseMySQL(connection));
+            services.AddDbContextPool<RecommendationContext>(options => options.UseCosmos("AccountEndpoint=https://recommendo.documents.azure.com:443/;AccountKey=E23QGQdn2DcSZQ1mSjN8dUVfdi9jPWKre4jhHGvHVR7DZGZJQAkoTlJvFHJoGlRTWzbh4aoY1dylcA1dF4NREQ==;", "recommendo"));
             services.AddControllers();
             services.AddSwaggerGen();
 

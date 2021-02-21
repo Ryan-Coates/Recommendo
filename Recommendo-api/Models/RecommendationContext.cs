@@ -19,10 +19,10 @@ namespace Recommendo_api.Models
            
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        /*protected override void OnModelCreating(ModelBuilder modelBuilder)
         {            
             modelBuilder.Entity<Recommendation>().ToTable("Recommendations");
             base.OnModelCreating(modelBuilder);
-        }
+        }*/
     }
 }
