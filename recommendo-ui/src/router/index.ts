@@ -57,6 +57,11 @@ const routes: Array<RouteConfig> = [
     path: '/daysOut',
     name: 'DaysOut',
     component: () => import('../views/DaysOut.vue')
+  },
+  {
+    path: '/kidsactivities',
+    name: 'KidsActivities',
+    component: () => import('../views/KidsActivities.vue')
   }
 ]
 
