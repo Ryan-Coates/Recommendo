@@ -11,6 +11,7 @@
       <router-link to="/recipes">Recipes</router-link> |
       <router-link to="/restaurants">Restaurants</router-link> |
       <router-link to="/daysout">DaysOut</router-link>
+      <router-link to="/kidsactivities">KidsActivities</router-link>
     </div>
     <router-view/>
   </div>
