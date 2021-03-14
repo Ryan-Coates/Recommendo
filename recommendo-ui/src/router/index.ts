@@ -57,6 +57,11 @@ const routes: Array<RouteConfig> = [
     path: '/daysOut',
     name: 'DaysOut',
     component: () => import('../views/DaysOut.vue')
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: () => import('../views/Login.vue')
   }
 ]
 
@@ -65,5 +70,4 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
-
 export default router
