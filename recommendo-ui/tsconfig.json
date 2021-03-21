@@ -34,7 +34,7 @@
     "src/**/*.vue",
     "tests/**/*.ts",
     "tests/**/*.tsx"
-  ],
+, "src/services/account.service.js"  ],
   "exclude": [
     "node_modules"
   ]
