@@ -1,9 +1,8 @@
 <template>
   <div>
   <v-facebook-login app-id='489770152036574'></v-facebook-login>
-  <button v-on:click="doStuff()">Do stuff</button>  
+  <button v-on:click="doStuff()">Do stuff</button>
   </div>
-  
 </template>
 
 <script>
@@ -14,11 +13,7 @@ export default {
     VFacebookLogin
   },
   methods: {
-      doStuff () {
-        if (VFacebookLogin.connected) {
-          alert ('connected')
-        }
-      }
+    doStuff () { if (VFacebookLogin.connected) { alert ('connected') } }
   }
 }
 </script>
