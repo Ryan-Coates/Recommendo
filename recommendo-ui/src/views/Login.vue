@@ -1,5 +1,5 @@
 <template>
-  <v-facebook-login app-id='966242223397117'></v-facebook-login>
+  <v-facebook-login app-id='489770152036574'></v-facebook-login>
 </template>
 
 <script>
@@ -9,5 +9,9 @@ export default {
   components: {
     VFacebookLogin
   }
+}
+
+if (VFacebookLogin.connected) {
+  alert ('connected')
 }
 </script>
