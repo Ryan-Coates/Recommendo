@@ -13,7 +13,7 @@ export default {
     VFacebookLogin
   },
   methods: {
-    doStuff () { if (VFacebookLogin.connected) { alert ('connected') } }
+    doStuff () { if (VFacebookLogin.connected) { alert('connected') } }
   }
 }
 </script>
