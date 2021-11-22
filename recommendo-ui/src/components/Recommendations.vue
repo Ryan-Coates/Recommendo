@@ -1,6 +1,8 @@
 
 <template>
     <div id="recommendations">
+      <recomendation-form @addRecommendation='appendRecommendation' :type=type></recomendation-form>
+      <br><hr>
         <h1>{{type}}</h1>
         <recomendation-item
         v-for='recommendation in recommendations'
@@ -8,8 +10,6 @@
         :recommendation='recommendation'
       >
       </recomendation-item>
-      <br><hr>
-      <recomendation-form @addRecommendation='appendRecommendation' :type=type></recomendation-form>
     </div>
 </template>
 <script>
