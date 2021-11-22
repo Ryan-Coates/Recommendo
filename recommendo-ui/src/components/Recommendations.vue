@@ -4,12 +4,14 @@
       <recomendation-form @addRecommendation='appendRecommendation' :type=type></recomendation-form>
       <br><hr>
         <h1>{{type}}</h1>
-        <recomendation-item
-        v-for='recommendation in recommendations'
-        :key='recommendation.id'
-        :recommendation='recommendation'
-      >
-      </recomendation-item>
+        <div class="accordion" role="tablist">
+          <recomendation-item
+          v-for='recommendation in recommendations'
+          :key='recommendation.id'
+          :recommendation='recommendation'
+          >
+        </recomendation-item>
+      </div>
     </div>
 </template>
 <script>
