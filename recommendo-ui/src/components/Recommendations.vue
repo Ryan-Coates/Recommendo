@@ -3,7 +3,6 @@
     <div id="recommendations">
       <recomendation-form @addRecommendation='appendRecommendation' :type=type></recomendation-form>
       <br><hr>
-        <h1>{{type}}</h1>
         <div class="accordion" role="tablist">
           <recomendation-item
           v-for='recommendation in recommendations'
