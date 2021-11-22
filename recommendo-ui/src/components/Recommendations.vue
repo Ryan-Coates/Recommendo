@@ -1,15 +1,16 @@
 
 <template>
     <div id="recommendations">
-        <h1>{{type}}</h1>
-        <recomendation-item
-        v-for='recommendation in recommendations'
-        :key='recommendation.id'
-        :recommendation='recommendation'
-      >
-      </recomendation-item>
-      <br><hr>
       <recomendation-form @addRecommendation='appendRecommendation' :type=type></recomendation-form>
+      <br><hr>
+        <div class="accordion" role="tablist">
+          <recomendation-item
+          v-for='recommendation in recommendations'
+          :key='recommendation.id'
+          :recommendation='recommendation'
+          >
+        </recomendation-item>
+      </div>
     </div>
 </template>
 <script>

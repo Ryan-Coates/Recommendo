@@ -1,4 +1,8 @@
 import Vue from 'vue'
+import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
+// import 'app.scss'
 import VueAxios from './plugins/axios'
 import App from './App.vue'
 import './registerServiceWorker'
@@ -14,6 +18,8 @@ Vue.config.productionTip = false
 Vue.prototype.$apiEndpoint = 'https://recommendo-api.azurewebsites.net/api/Recommendations'
 
 Vue.use(VueAxios)
+Vue.use(BootstrapVue)
+Vue.use(IconsPlugin)
 
 new Vue({
   router,
