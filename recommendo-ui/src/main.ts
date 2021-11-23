@@ -15,7 +15,7 @@ Vue.config.productionTip = false
 // Vue.prototype.$apiEndpoint = 'https://localhost:5001/api/Recommendations'
 
 // live
-Vue.prototype.$apiEndpoint = 'https://rktv4mzdzt.eu-west-1.awsapprunner.com/api/Recommendations'
+Vue.prototype.$apiEndpoint = 'https://yjf4vf1vol.execute-api.eu-west-1.amazonaws.com/Prod/api/Recommendations'
 
 Vue.use(VueAxios)
 Vue.use(BootstrapVue)
