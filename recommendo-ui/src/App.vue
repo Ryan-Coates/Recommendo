@@ -5,13 +5,17 @@
     <router-link to="/">Home</router-link> |
     <router-link to="/about">About</router-link>
     </div>
-    <b-navbar type="dark" variant="redommendo" justified>
+    <b-navbar type="dark" variant="redommendo" align="center">
     <b-navbar-nav>
       <router-link class="nav-link" to="/movies">Movies</router-link>
       <router-link class="nav-link" to="/series">Series</router-link>
       <router-link class="nav-link" to="/games">Games</router-link>
       <router-link class="nav-link" to="/books">Books</router-link>
       <router-link class="nav-link" to="/music">Music</router-link>
+    </b-navbar-nav>
+  </b-navbar>
+   <b-navbar type="dark" variant="redommendo" align="center">
+    <b-navbar-nav>
       <router-link class="nav-link" to="/recipes">Recipes</router-link>
       <router-link class="nav-link" to="/restaurants">Restaurants</router-link>
       <router-link class="nav-link" to="/daysout">DaysOut</router-link>
