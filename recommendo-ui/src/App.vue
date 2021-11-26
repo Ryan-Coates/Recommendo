@@ -5,7 +5,7 @@
     <router-link to="/">Home</router-link> |
     <router-link to="/about">About</router-link>
     </div>
-    <b-navbar type="dark" variant="primary">
+    <b-navbar type="dark" variant="redommendo" justified>
     <b-navbar-nav>
       <router-link class="nav-link" to="/movies">Movies</router-link>
       <router-link class="nav-link" to="/series">Series</router-link>
@@ -30,7 +30,11 @@
   text-align: center;
   color: #2c3e50;
 }
-
+.bg-redommendo
+{
+  background-color: #9a2121;
+  width: 100%;
+}
 #nav {
   padding: 30px;
 
