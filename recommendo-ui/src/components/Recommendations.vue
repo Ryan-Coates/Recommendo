@@ -35,3 +35,8 @@ export default {
   }
 }
 </script>
+<style scoped>
+#recommendations{
+  margin-top: 10px;
+}
+</style>
