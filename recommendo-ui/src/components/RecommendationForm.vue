@@ -4,11 +4,21 @@
   <b-collapse id="collapse-1" class="mt-2">
     <b-card>
       <form v-on:submit.prevent="recommendationSubmit(name, description, recommender)" class="" action="#" method="post" name="add-recommendation" data-netlify="true" data-netlify-honeypot="bot-field" >
-          <input v-model="name" type="text" name="name" value="" placeholder="name">
-          <input v-model="description" type="textarea" name="description" value="" placeholder="description">
+          <input v-model="name" type="text" name="name" value="" placeholder="Name?">
+          <input v-model="description" type="textarea" name="description" value="" placeholder="Description?">
           <br>
-          <input v-model="recommender" type="text" name="recommender" value="" placeholder="what's your name?">
-          <input v-model="category" type="text" name="category" value="" placeholder="category">
+          <select v-model="recommender">
+            <option disabled value="">What's your name?</option>
+            <option>Ryan</option>
+            <option>Jess</option>
+            <option>Shane</option>
+            <option>Steph</option>
+            <option>Colin</option>
+            <option>Amanda</option>
+            <option>Lawrence</option>
+            <option>Elaine</option>
+          </select>
+          <input v-model="category" type="text" name="category" value="" hidden="true" placeholder="category">
           <br>
           <button type="submit" name="button">Add {{type}}</button>
         </form>
@@ -54,3 +64,17 @@ export default {
   }
 }
 </script>
+<style scoped>
+.btn-primary{
+    color: #fff;
+    background-color: #4e1305;
+    border-color: #9a2121;
+}
+.btn-primary:hover
+{
+    color: #fff;
+    background-color: #4e1305;
+    border-color: #FFA28E;
+}
+
+</style>
