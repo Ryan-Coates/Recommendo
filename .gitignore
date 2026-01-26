@@ -1,0 +1,33 @@
+# .NET
+**/bin/
+**/obj/
+**/.vs/
+*.user
+*.suo
+*.userprefs
+*.sln.docstates
+
+# Frontend
+**/node_modules/
+**/dist/
+**/.vite/
+**/.env.local
+**/.env.*.local
+
+# Docker
+**/.dockerignore
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Database
+*.db
+*.db-shm
+*.db-wal

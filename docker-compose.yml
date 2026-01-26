@@ -1,0 +1,58 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5001:5001"
+    environment:
+      - VITE_API_URL=http://localhost:5002
+    depends_on:
+      - api
+    networks:
+      - recommendo-network
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    ports:
+      - "5002:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=recommendo;Username=recommendo;Password=recommendo123
+      - JwtSettings__Secret=your-super-secret-key-change-this-in-production-minimum-32-characters
+      - JwtSettings__Issuer=RecommendoAPI
+      - JwtSettings__Audience=RecommendoApp
+      - JwtSettings__ExpiryInMinutes=1440
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - recommendo-network
+
+  db:
+    image: postgres:15-alpine
+    ports:
+      - "5003:5432"
+    environment:
+      - POSTGRES_DB=recommendo
+      - POSTGRES_USER=recommendo
+      - POSTGRES_PASSWORD=recommendo123
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U recommendo"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - recommendo-network
+
+volumes:
+  postgres-data:
+
+networks:
+  recommendo-network:
+    driver: bridge
