@@ -25,10 +25,11 @@ public class RecommendationService : IRecommendationService
 
     public async Task<List<RecommendationDto>> GetRecommendationsAsync(int userId, string? type, int? friendId)
     {
+        // Show recommendations the user received OR created
         var query = _context.Recommendations
             .Include(r => r.CreatedByUser)
             .Include(r => r.RecommendedToUser)
-            .Where(r => r.RecommendedToUserId == userId);
+            .Where(r => r.RecommendedToUserId == userId || r.CreatedByUserId == userId);
 
         if (!string.IsNullOrEmpty(type) && Enum.TryParse<RecommendationType>(type, true, out var recType))
         {
@@ -76,7 +77,8 @@ public class RecommendationService : IRecommendationService
                 .Select(f => f.UserId == createdByUserId ? f.FriendId : f.UserId)
                 .ToListAsync();
             
-            targetUserIds = friendIds;
+            // If no friends, create a recommendation to yourself (personal list)
+            targetUserIds = friendIds.Count > 0 ? friendIds : new List<int> { createdByUserId };
         }
 
         foreach (var recommendedToUserId in targetUserIds)
