@@ -38,6 +38,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       email: response.email,
       username: response.username,
       createdAt: new Date().toISOString(),
+      isAdmin: response.isAdmin,
     };
     setUser(userObj);
     localStorage.setItem('token', response.token);
@@ -52,6 +53,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       email: response.email,
       username: response.username,
       createdAt: new Date().toISOString(),
+      isAdmin: response.isAdmin,
     };
     setUser(userObj);
     localStorage.setItem('token', response.token);

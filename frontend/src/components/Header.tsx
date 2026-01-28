@@ -24,6 +24,9 @@ export const Header = () => {
         <nav className="nav">
           <Link to="/" className="nav-link">Home</Link>
           <Link to="/friends" className="nav-link">Friends</Link>
+          {user.isAdmin && (
+            <Link to="/admin" className="nav-link admin-link">Admin</Link>
+          )}
           <span className="username">{user.username}</span>
           <button onClick={handleLogout} className="logout-btn">
             Logout

@@ -20,7 +20,22 @@ export const Login = () => {
       await login(email, password);
       navigate('/');
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Failed to login. Please check your credentials.');
+      console.error('Login error:', err);
+      
+      // Check for validation errors
+      if (err.response?.data?.errors) {
+        const errors = err.response.data.errors;
+        const errorMessages = Object.entries(errors)
+          .map(([field, messages]: [string, any]) => `${field}: ${Array.isArray(messages) ? messages.join(', ') : messages}`)
+          .join('; ');
+        setError(errorMessages);
+      } else if (err.response?.data?.message) {
+        setError(err.response.data.message);
+      } else if (err.message) {
+        setError(`Error: ${err.message}`);
+      } else {
+        setError('Failed to login. Please check your credentials.');
+      }
     } finally {
       setIsLoading(false);
     }

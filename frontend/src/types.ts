@@ -3,6 +3,7 @@ export interface User {
   email: string;
   username: string;
   createdAt: string;
+  isAdmin: boolean;
 }
 
 export interface AuthResponse {
@@ -10,6 +11,7 @@ export interface AuthResponse {
   email: string;
   username: string;
   token: string;
+  isAdmin: boolean;
 }
 
 export interface LoginRequest {

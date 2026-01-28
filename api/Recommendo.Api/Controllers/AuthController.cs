@@ -27,14 +27,19 @@ public class AuthController : ControllerBase
             return BadRequest(new { message = "All fields are required" });
         }
 
-        var result = await _authService.RegisterAsync(request);
-
-        if (result == null)
+        try
         {
-            return BadRequest(new { message = "User already exists" });
+            var result = await _authService.RegisterAsync(request);
+            return Ok(result);
         }
-
-        return Ok(result);
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = $"Registration failed: {ex.Message}" });
+        }
     }
 
     [HttpPost("login")]

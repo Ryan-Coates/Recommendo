@@ -34,12 +34,12 @@ public class AuthService : IAuthService
         // Check if user already exists
         if (await _context.Users.AnyAsync(u => u.Email == request.Email))
         {
-            return null;
+            throw new ArgumentException("An account with this email already exists");
         }
 
         if (await _context.Users.AnyAsync(u => u.Username == request.Username))
         {
-            return null;
+            throw new ArgumentException("This username is already taken");
         }
 
         // Hash password
@@ -49,7 +49,8 @@ public class AuthService : IAuthService
         {
             Email = request.Email,
             Username = request.Username,
-            PasswordHash = passwordHash
+            PasswordHash = passwordHash,
+            IsAdmin = request.Email.ToLower() == "ryancoates89@hotmail.co.uk"
         };
 
         _context.Users.Add(user);
@@ -57,7 +58,7 @@ public class AuthService : IAuthService
 
         var token = GenerateJwtToken(user);
 
-        return new AuthResponse(user.Id, user.Email, user.Username, token);
+        return new AuthResponse(user.Id, user.Email, user.Username, token, user.IsAdmin);
     }
 
     public async Task<AuthResponse?> LoginAsync(LoginRequest request)
@@ -71,7 +72,7 @@ public class AuthService : IAuthService
 
         var token = GenerateJwtToken(user);
 
-        return new AuthResponse(user.Id, user.Email, user.Username, token);
+        return new AuthResponse(user.Id, user.Email, user.Username, token, user.IsAdmin);
     }
 
     public async Task<UserDto?> GetUserByIdAsync(int userId)
@@ -80,7 +81,7 @@ public class AuthService : IAuthService
         
         return user == null 
             ? null 
-            : new UserDto(user.Id, user.Email, user.Username, user.CreatedAt);
+            : new UserDto(user.Id, user.Email, user.Username, user.CreatedAt, user.IsAdmin);
     }
 
     private string GenerateJwtToken(User user)

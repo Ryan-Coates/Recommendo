@@ -3,10 +3,10 @@ namespace Recommendo.Api.DTOs;
 // Auth DTOs
 public record RegisterRequest(string Email, string Username, string Password);
 public record LoginRequest(string Email, string Password);
-public record AuthResponse(int Id, string Email, string Username, string Token);
+public record AuthResponse(int Id, string Email, string Username, string Token, bool IsAdmin);
 
 // User DTOs
-public record UserDto(int Id, string Email, string Username, DateTime CreatedAt);
+public record UserDto(int Id, string Email, string Username, DateTime CreatedAt, bool IsAdmin);
 
 // Friend DTOs
 public record FriendDto(int Id, int UserId, string Username, string Email, string Status, DateTime CreatedAt);
