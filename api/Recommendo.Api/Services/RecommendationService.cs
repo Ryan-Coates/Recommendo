@@ -66,7 +66,20 @@ public class RecommendationService : IRecommendationService
 
         var recommendations = new List<Recommendation>();
 
-        foreach (var recommendedToUserId in request.RecommendedToUserIds)
+        // If no specific users, create recommendations for all friends
+        var targetUserIds = request.RecommendedToUserIds;
+        if (targetUserIds == null || targetUserIds.Count == 0)
+        {
+            // Get all friends of the current user
+            var friendIds = await _context.Friendships
+                .Where(f => (f.UserId == createdByUserId || f.FriendId == createdByUserId) && f.Status == FriendshipStatus.Accepted)
+                .Select(f => f.UserId == createdByUserId ? f.FriendId : f.UserId)
+                .ToListAsync();
+            
+            targetUserIds = friendIds;
+        }
+
+        foreach (var recommendedToUserId in targetUserIds)
         {
             var recommendation = new Recommendation
             {

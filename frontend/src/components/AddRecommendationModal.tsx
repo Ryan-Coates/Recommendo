@@ -39,16 +39,11 @@ export const AddRecommendationModal = ({ friends, types, onClose }: Props) => {
       return;
     }
 
-    if (selectedFriends.length === 0) {
-      setError('Please select at least one friend');
-      return;
-    }
-
     createMutation.mutate({
       title: title.trim(),
       type,
       description: description.trim() || undefined,
-      recommendedToUserIds: selectedFriends,
+      recommendedToUserIds: selectedFriends.length > 0 ? selectedFriends : undefined,
     });
   };
 
@@ -111,9 +106,9 @@ export const AddRecommendationModal = ({ friends, types, onClose }: Props) => {
           </div>
 
           <div className="form-group">
-            <label>Recommend to *</label>
+            <label>Recommend to (optional)</label>
             {friends.length === 0 ? (
-              <p className="no-friends">No friends yet. Add some friends first!</p>
+              <p className="no-friends">No friends yet. This will be visible to friends when you add them!</p>
             ) : (
               <div className="friends-list">
                 {friends.map((friend) => (
@@ -126,6 +121,7 @@ export const AddRecommendationModal = ({ friends, types, onClose }: Props) => {
                     <span>{friend.username}</span>
                   </label>
                 ))}
+                <p className="help-text">Leave empty to share with all friends</p>
               </div>
             )}
           </div>
@@ -136,7 +132,7 @@ export const AddRecommendationModal = ({ friends, types, onClose }: Props) => {
             </button>
             <button
               type="submit"
-              disabled={createMutation.isPending || friends.length === 0}
+              disabled={createMutation.isPending}
               className="submit-btn"
             >
               {createMutation.isPending ? 'Adding...' : 'Add Recommendation'}

@@ -19,7 +19,7 @@ public record CreateRecommendationRequest(
     string Type,
     string? Description,
     string? ExternalId,
-    List<int> RecommendedToUserIds
+    List<int>? RecommendedToUserIds
 );
 
 public record UpdateRecommendationRequest(string Status);

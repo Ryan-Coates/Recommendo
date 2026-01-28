@@ -99,6 +99,13 @@
   text-align: center;
 }
 
+.help-text {
+  color: #6b7280;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+  font-style: italic;
+}
+
 .modal-actions {
   display: flex;
   gap: 1rem;

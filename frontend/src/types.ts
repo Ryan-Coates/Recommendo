@@ -58,5 +58,5 @@ export interface CreateRecommendationRequest {
   type: string;
   description?: string;
   externalId?: string;
-  recommendedToUserIds: number[];
+  recommendedToUserIds?: number[];
 }
