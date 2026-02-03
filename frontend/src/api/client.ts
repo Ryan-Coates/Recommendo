@@ -1,9 +1,24 @@
 import axios from 'axios';
 
-// Use relative URL for production (works with nginx proxy), localhost for development
-const API_URL = import.meta.env.VITE_API_URL || (
-  window.location.hostname === 'localhost' ? 'http://localhost:5002' : ''
-);
+// Determine API URL based on environment
+// - localhost: use explicit localhost:5002 for development
+// - production (recommendo.norn.uk): use relative path (proxied by nginx)
+const getApiUrl = () => {
+  // Check if VITE_API_URL is explicitly set
+  if (import.meta.env.VITE_API_URL) {
+    return import.meta.env.VITE_API_URL;
+  }
+  
+  // For localhost, use explicit API port
+  if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    return 'http://localhost:5002';
+  }
+  
+  // For production domains, use relative URL (nginx proxy)
+  return '';
+};
+
+const API_URL = getApiUrl();
 
 export const api = axios.create({
   baseURL: `${API_URL}/api`,
