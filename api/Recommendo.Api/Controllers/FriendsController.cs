@@ -26,6 +26,30 @@ public class FriendsController : ControllerBase
         return Ok(friends);
     }
 
+    [HttpGet("pending")]
+    public async Task<ActionResult<List<FriendDto>>> GetPendingRequests()
+    {
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var requests = await _friendService.GetPendingRequestsAsync(userId);
+        return Ok(requests);
+    }
+
+    [HttpGet("sent")]
+    public async Task<ActionResult<List<FriendDto>>> GetSentRequests()
+    {
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var requests = await _friendService.GetSentRequestsAsync(userId);
+        return Ok(requests);
+    }
+
+    [HttpGet("search")]
+    public async Task<ActionResult<List<SearchUserDto>>> SearchUsers([FromQuery] string query)
+    {
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var users = await _friendService.SearchUsersAsync(userId, query);
+        return Ok(users);
+    }
+
     [HttpPost("invite")]
     public async Task<ActionResult<InviteLinkDto>> GenerateInviteLink()
     {
@@ -45,7 +69,35 @@ public class FriendsController : ControllerBase
             return BadRequest(new { message = "Invalid or expired invite link" });
         }
 
-        return Ok(new { message = "Friend added successfully" });
+        return Ok(new { message = "Friend request sent successfully" });
+    }
+
+    [HttpPost("request")]
+    public async Task<ActionResult> SendFriendRequest([FromBody] SendFriendRequestRequest request)
+    {
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var success = await _friendService.SendFriendRequestAsync(userId, request.TargetUserId);
+
+        if (!success)
+        {
+            return BadRequest(new { message = "Unable to send friend request" });
+        }
+
+        return Ok(new { message = "Friend request sent successfully" });
+    }
+
+    [HttpPost("request/respond")]
+    public async Task<ActionResult> RespondToFriendRequest([FromBody] RespondToFriendRequestRequest request)
+    {
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var success = await _friendService.RespondToFriendRequestAsync(userId, request.FriendshipId, request.Accept);
+
+        if (!success)
+        {
+            return BadRequest(new { message = "Invalid friend request" });
+        }
+
+        return Ok(new { message = request.Accept ? "Friend request accepted" : "Friend request rejected" });
     }
 
     [HttpDelete("{friendId}")]

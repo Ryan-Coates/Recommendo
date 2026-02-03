@@ -12,6 +12,9 @@ public record UserDto(int Id, string Email, string Username, DateTime CreatedAt,
 public record FriendDto(int Id, int UserId, string Username, string Email, string Status, DateTime CreatedAt);
 public record InviteLinkDto(string Token, string InviteUrl, DateTime ExpiresAt);
 public record AcceptInviteRequest(string Token);
+public record SearchUserDto(int Id, string Username, string Email, string FriendshipStatus);
+public record SendFriendRequestRequest(int TargetUserId);
+public record RespondToFriendRequestRequest(int FriendshipId, bool Accept);
 
 // Recommendation DTOs
 public record CreateRecommendationRequest(

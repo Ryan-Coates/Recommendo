@@ -34,6 +34,13 @@ export interface Friend {
   createdAt: string;
 }
 
+export interface SearchUser {
+  id: number;
+  username: string;
+  email: string;
+  friendshipStatus: string;
+}
+
 export interface InviteLink {
   token: string;
   inviteUrl: string;
