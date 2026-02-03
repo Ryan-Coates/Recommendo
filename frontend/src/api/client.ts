@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Determine API URL based on environment
 // - localhost: use explicit localhost:5002 for development
-// - production (recommendo.norn.uk): use relative path (proxied by nginx)
+// - production (recommendo.norn.uk): use api-recommendo.norn.uk subdomain
 const getApiUrl = () => {
   // Check if VITE_API_URL is explicitly set
   if (import.meta.env.VITE_API_URL) {
@@ -14,7 +14,12 @@ const getApiUrl = () => {
     return 'http://localhost:5002';
   }
   
-  // For production domains, use relative URL (nginx proxy)
+  // For production, use api subdomain
+  if (window.location.hostname === 'recommendo.norn.uk') {
+    return 'https://api-recommendo.norn.uk';
+  }
+  
+  // Fallback to relative URL (nginx proxy)
   return '';
 };
 
