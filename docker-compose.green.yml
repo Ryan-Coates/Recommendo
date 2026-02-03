@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  # Green environment uses the same database as blue
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: recommendo-api-green
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ConnectionStrings__DefaultConnection: "Host=recommendo-db-blue;Port=5432;Database=recommendo;Username=recommendo;Password=${DB_PASSWORD:-your_secure_password}"
+      Jwt__Secret: ${JWT_SECRET}
+      Jwt__Issuer: "RecommendoAPI"
+      Jwt__Audience: "RecommendoApp"
+      Jwt__ExpiryInMinutes: "1440"
+    ports:
+      - "5001:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - recommendo-network
+    restart: unless-stopped
+    labels:
+      - "com.recommendo.environment=green"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: recommendo-frontend-green
+    environment:
+      VITE_API_URL: ${API_URL:-http://localhost}
+    ports:
+      - "3001:80"
+    depends_on:
+      - api
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - recommendo-network
+    restart: unless-stopped
+    labels:
+      - "com.recommendo.environment=green"
+
+networks:
+  recommendo-network:
+    external: true

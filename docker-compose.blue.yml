@@ -1,0 +1,81 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: recommendo-db-blue
+    environment:
+      POSTGRES_DB: recommendo
+      POSTGRES_USER: recommendo
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-your_secure_password}
+    ports:
+      - "5432:5432"
+    volumes:
+      - recommendo-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U recommendo"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - recommendo-network
+    restart: unless-stopped
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: recommendo-api-blue
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ConnectionStrings__DefaultConnection: "Host=db;Port=5432;Database=recommendo;Username=recommendo;Password=${DB_PASSWORD:-your_secure_password}"
+      Jwt__Secret: ${JWT_SECRET}
+      Jwt__Issuer: "RecommendoAPI"
+      Jwt__Audience: "RecommendoApp"
+      Jwt__ExpiryInMinutes: "1440"
+    ports:
+      - "5000:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - recommendo-network
+    restart: unless-stopped
+    labels:
+      - "com.recommendo.environment=blue"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: recommendo-frontend-blue
+    environment:
+      VITE_API_URL: ${API_URL:-http://localhost}
+    ports:
+      - "3000:80"
+    depends_on:
+      - api
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - recommendo-network
+    restart: unless-stopped
+    labels:
+      - "com.recommendo.environment=blue"
+
+networks:
+  recommendo-network:
+    driver: bridge
+
+volumes:
+  recommendo-db-data:
+    name: recommendo-db-data

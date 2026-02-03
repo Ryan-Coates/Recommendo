@@ -1,0 +1,112 @@
+name: Deploy to Production (Blue-Green)
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Target environment color'
+        required: true
+        default: 'green'
+        type: choice
+        options:
+          - green
+          - blue
+
+jobs:
+  deploy:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.8.0
+        with:
+          ssh-private-key: ${{ secrets.PRODUCTION_SSH_KEY }}
+
+      - name: Copy files to server
+        run: |
+          rsync -avz --delete \
+            --exclude '.git' \
+            --exclude 'node_modules' \
+            --exclude '.env' \
+            ./ ${{ secrets.PRODUCTION_USER }}@${{ secrets.PRODUCTION_HOST }}:/opt/recommendo/
+
+      - name: Deploy to ${{ github.event.inputs.environment }} environment
+        run: |
+          ssh ${{ secrets.PRODUCTION_USER }}@${{ secrets.PRODUCTION_HOST }} << 'EOF'
+            cd /opt/recommendo
+            ./deploy-bluegreen.sh deploy ${{ github.event.inputs.environment }}
+          EOF
+
+      - name: Run health checks
+        run: |
+          ssh ${{ secrets.PRODUCTION_USER }}@${{ secrets.PRODUCTION_HOST }} << 'EOF'
+            cd /opt/recommendo
+            ./scripts/health-check.sh ${{ github.event.inputs.environment }}
+          EOF
+
+      - name: Run smoke tests
+        run: |
+          ssh ${{ secrets.PRODUCTION_USER }}@${{ secrets.PRODUCTION_HOST }} << 'EOF'
+            cd /opt/recommendo
+            ./scripts/smoke-tests.sh ${{ github.event.inputs.environment }}
+          EOF
+
+      - name: Switch traffic (gradual rollout)
+        run: |
+          ssh ${{ secrets.PRODUCTION_USER }}@${{ secrets.PRODUCTION_HOST }} << 'EOF'
+            cd /opt/recommendo
+            echo "Switching 10% traffic to ${{ github.event.inputs.environment }}..."
+            ./scripts/traffic-switch.sh ${{ github.event.inputs.environment }} 10
+            sleep 300
+            
+            echo "Switching 50% traffic to ${{ github.event.inputs.environment }}..."
+            ./scripts/traffic-switch.sh ${{ github.event.inputs.environment }} 50
+            sleep 300
+            
+            echo "Switching 100% traffic to ${{ github.event.inputs.environment }}..."
+            ./scripts/traffic-switch.sh ${{ github.event.inputs.environment }} 100
+          EOF
+
+      - name: Monitor new environment
+        run: |
+          ssh ${{ secrets.PRODUCTION_USER }}@${{ secrets.PRODUCTION_HOST }} << 'EOF'
+            cd /opt/recommendo
+            echo "Monitoring for 5 minutes..."
+            sleep 300
+            ./scripts/health-check.sh ${{ github.event.inputs.environment }}
+          EOF
+
+      - name: Cleanup old environment
+        if: success()
+        run: |
+          ssh ${{ secrets.PRODUCTION_USER }}@${{ secrets.PRODUCTION_HOST }} << 'EOF'
+            cd /opt/recommendo
+            OLD_ENV=$([[ "${{ github.event.inputs.environment }}" == "green" ]] && echo "blue" || echo "green")
+            echo "Cleaning up $OLD_ENV environment..."
+            ./deploy-bluegreen.sh cleanup $OLD_ENV
+          EOF
+
+      - name: Rollback on failure
+        if: failure()
+        run: |
+          ssh ${{ secrets.PRODUCTION_USER }}@${{ secrets.PRODUCTION_HOST }} << 'EOF'
+            cd /opt/recommendo
+            OLD_ENV=$([[ "${{ github.event.inputs.environment }}" == "green" ]] && echo "blue" || echo "green")
+            echo "Deployment failed! Rolling back to $OLD_ENV..."
+            ./scripts/rollback.sh $OLD_ENV
+          EOF
+
+      - name: Notify on success
+        if: success()
+        run: |
+          echo "✅ Deployment to ${{ github.event.inputs.environment }} successful!"
+
+      - name: Notify on failure
+        if: failure()
+        run: |
+          echo "❌ Deployment to ${{ github.event.inputs.environment }} failed and was rolled back!"

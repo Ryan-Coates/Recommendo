@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: recommendo-test-db
+    environment:
+      POSTGRES_DB: recommendo_test
+      POSTGRES_USER: recommendo
+      POSTGRES_PASSWORD: recommendo_test_pass
+    ports:
+      - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U recommendo"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - recommendo-test-network
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: recommendo-test-api
+    environment:
+      ASPNETCORE_ENVIRONMENT: Test
+      ConnectionStrings__DefaultConnection: "Host=db;Port=5432;Database=recommendo_test;Username=recommendo;Password=recommendo_test_pass"
+      Jwt__Secret: "test-secret-key-for-testing-only-minimum-32-characters"
+      Jwt__Issuer: "RecommendoTestAPI"
+      Jwt__Audience: "RecommendoTestApp"
+      Jwt__ExpiryInMinutes: "60"
+    ports:
+      - "5002:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - recommendo-test-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: recommendo-test-frontend
+    environment:
+      VITE_API_URL: http://localhost:5002
+    ports:
+      - "3002:80"
+    depends_on:
+      - api
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - recommendo-test-network
+
+networks:
+  recommendo-test-network:
+    driver: bridge
