@@ -6,8 +6,25 @@ using Microsoft.OpenApi.Models;
 using Recommendo.Api.Configuration;
 using Recommendo.Api.Data;
 using Recommendo.Api.Services;
+using Serilog;
+
+// Configure Serilog for file logging
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .WriteTo.File("/app/logs/recommendo-.log", 
+        rollingInterval: RollingInterval.Day,
+        retainedFileCountLimit: 7,
+        outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception}")
+    .CreateLogger();
+
+try
+{
+    Log.Information("Starting Recommendo API");
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Add Serilog
+builder.Host.UseSerilog();
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -93,11 +110,44 @@ builder.Services.AddScoped<IRecommendationService, RecommendationService>();
 
 var app = builder.Build();
 
-// Apply migrations automatically
+// Apply migrations automatically with detailed logging
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<RecommendoContext>();
-    dbContext.Database.Migrate();
+    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+    
+    try
+    {
+        logger.LogInformation("Checking database connection...");
+        var canConnect = await dbContext.Database.CanConnectAsync();
+        logger.LogInformation("Database connection status: {Status}", canConnect);
+        
+        logger.LogInformation("Applying pending migrations...");
+        var pendingMigrations = await dbContext.Database.GetPendingMigrationsAsync();
+        var pendingList = pendingMigrations.ToList();
+        
+        if (pendingList.Any())
+        {
+            logger.LogInformation("Found {Count} pending migrations: {Migrations}", 
+                pendingList.Count, string.Join(", ", pendingList));
+        }
+        else
+        {
+            logger.LogInformation("No pending migrations found");
+        }
+        
+        await dbContext.Database.MigrateAsync();
+        logger.LogInformation("Database migrations applied successfully");
+        
+        var appliedMigrations = await dbContext.Database.GetAppliedMigrationsAsync();
+        logger.LogInformation("Applied migrations: {Migrations}", 
+            string.Join(", ", appliedMigrations));
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "An error occurred while migrating the database");
+        throw;
+    }
 }
 
 // Configure the HTTP request pipeline.
@@ -107,6 +157,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseSerilogRequestLogging();
+
 app.UseCors("AllowFrontend");
 
 app.UseAuthentication();
@@ -114,4 +166,16 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+Log.Information("Recommendo API started successfully");
 app.Run();
+
+}
+catch (Exception ex)
+{
+    Log.Fatal(ex, "Application failed to start");
+    throw;
+}
+finally
+{
+    Log.CloseAndFlush();
+}

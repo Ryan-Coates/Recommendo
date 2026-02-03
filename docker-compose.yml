@@ -26,6 +26,8 @@ services:
       - JwtSettings__Issuer=RecommendoAPI
       - JwtSettings__Audience=RecommendoApp
       - JwtSettings__ExpiryInMinutes=1440
+    volumes:
+      - api-logs:/app/logs
     depends_on:
       db:
         condition: service_healthy
@@ -52,6 +54,7 @@ services:
 
 volumes:
   postgres-data:
+  api-logs:
 
 networks:
   recommendo-network:
